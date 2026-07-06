@@ -1,0 +1,18 @@
+[Unit]
+Description=Media Downloader API
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/media-downloader
+Environment="PATH=/opt/media-downloader/venv/bin"
+Environment="TEMP_DIR=/opt/media-downloader/backend/temp"
+Environment="CORS_ORIGINS=https://seu-usuario.github.io"
+ExecStart=/opt/media-downloader/venv/bin/uvicorn backend.app:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -11,4 +11,9 @@ __pycache__/
 # Ambiente virtual (se estiver usando)
 venv/
 env/
-.env/ 
+.env
+backend/.env
+backend/temp/
+
+# Frontend local overrides
+frontend/config.local.js 

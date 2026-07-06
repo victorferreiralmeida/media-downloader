@@ -23,7 +23,7 @@ Este documento apresenta os requisitos do sistema de forma estruturada, descreve
 
 | ID     | Descrição |
 |--------|----------|
-| RNF01  | O sistema deve ser executado como uma aplicação desktop, sem dependência de navegadores. |
+| RNF01  | O sistema deve estar disponível como aplicação desktop e como site web (API + frontend estático). |
 | RNF02  | A interface deve ser simples, intuitiva e de fácil utilização. |
 | RNF03  | O sistema deve apresentar tempo de resposta adequado ao processar links e iniciar downloads. |
 | RNF04  | O sistema deve garantir a integridade dos arquivos baixados. |
