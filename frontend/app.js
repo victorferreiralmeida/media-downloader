@@ -111,8 +111,10 @@ async function apiPost(path, body) {
       body: JSON.stringify(body),
     });
   } catch {
-    const hint =
-      window.location.port === "8000"
+    const isHttpsPage = window.location.protocol === "https:";
+    const hint = isHttpsPage
+      ? "A API precisa estar disponível por HTTPS. Verifique o certificado e a URL da API em produção."
+      : window.location.port === "8000"
         ? "Verifique se a API está rodando."
         : "Abra http://127.0.0.1:8000 ou verifique se a API está rodando.";
     throw new Error(`Não foi possível conectar à API. ${hint}`);

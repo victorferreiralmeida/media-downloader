@@ -1,6 +1,6 @@
 // URL da API usada pelo frontend.
-// Em produção no GitHub Pages, aponta para a instância remota do backend.
-const DEFAULT_API_BASE = "http://137.131.227.77:8000";
+// Em produção no GitHub Pages, a API precisa ser acessada via HTTPS.
+const DEFAULT_API_BASE = "https://137.131.227.77:8000";
 
 if (!window.API_BASE) {
   const { protocol, hostname, port, origin } = window.location;
