@@ -198,6 +198,22 @@ function closeEventSource() {
   }
 }
 
+function parseContentDisposition(header) {
+  if (!header) return null;
+
+  const utf8Match = header.match(/filename\*=UTF-8''([^;]+)/i);
+  if (utf8Match) {
+    try {
+      return decodeURIComponent(utf8Match[1]);
+    } catch {
+      return utf8Match[1];
+    }
+  }
+
+  const match = header.match(/filename="?([^";]+)"?/i);
+  return match ? match[1] : null;
+}
+
 function watchProgress(jobId) {
   return new Promise((resolve, reject) => {
     let finished = false;
@@ -238,11 +254,12 @@ async function triggerBrowserDownload(jobId, filename) {
   const response = await fetch(`${API_BASE}/api/file/${jobId}`);
   if (!response.ok) throw new Error("não foi possível obter o arquivo");
 
+  const serverFilename = parseContentDisposition(response.headers.get("Content-Disposition"));
   const blob = await response.blob();
   const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = objectUrl;
-  link.download = filename || "download";
+  link.download = filename || serverFilename || "download";
   document.body.appendChild(link);
   link.click();
   link.remove();

@@ -228,6 +228,9 @@ input {
   position: relative;
   width: 100%;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .input-icon {
@@ -242,7 +245,8 @@ input {
 }
 
 #url-input {
-  width: 100%;
+  flex: 1;
+  width: auto;
   padding: 0.9rem 1.25rem 0.9rem 2.75rem;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -552,15 +556,20 @@ input {
   color: var(--text);
   padding: 0;
   max-width: 400px;
-  width: calc(100% - 2rem);
-  margin: auto;
+  width: min(100%, 400px);
   position: fixed;
+  inset: 0;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  margin: 0;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
 }
 
 .dialog::backdrop {
+  position: fixed;
+  inset: 0;
   background: rgba(5, 12, 24, 0.75);
   backdrop-filter: blur(4px);
 }
