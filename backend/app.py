@@ -60,7 +60,7 @@ CORS_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
         "CORS_ORIGINS",
-        "http://localhost:5500,http://127.0.0.1:5500,http://[::1]:5500",
+        "http://localhost:5500,http://127.0.0.1:5500,http://[::1]:5500,https://victorferreiralmeida.github.io",
     ).split(",")
     if origin.strip() and "*" not in origin.strip()
 ]

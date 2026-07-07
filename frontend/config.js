@@ -1,5 +1,6 @@
-// GitHub Pages: defina a URL da sua API antes do deploy, por exemplo:
-// window.API_BASE = "https://api.seudominio.com";
+// URL da API usada pelo frontend.
+// Em produção no GitHub Pages, aponta para a instância remota do backend.
+const DEFAULT_API_BASE = "http://137.131.227.77:8000";
 
 if (!window.API_BASE) {
   const { protocol, hostname, port, origin } = window.location;
@@ -13,7 +14,9 @@ if (!window.API_BASE) {
     window.API_BASE = origin;
   } else if (hostname === "127.0.0.1" || hostname === "localhost" || hostname === "[::1]") {
     window.API_BASE = "http://127.0.0.1:8000";
+  } else if (hostname.endsWith(".github.io")) {
+    window.API_BASE = DEFAULT_API_BASE;
   } else {
-    window.API_BASE = origin;
+    window.API_BASE = DEFAULT_API_BASE;
   }
 }
