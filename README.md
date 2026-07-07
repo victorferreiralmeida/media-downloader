@@ -1,68 +1,110 @@
-# Sobre
+# Media Downloader
+
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
-![CustomTkinter](https://img.shields.io/badge/UI-CustomTkinter-purple)
+![CustomTkinter](https://img.shields.io/badge/Desktop-CustomTkinter-purple)
+![FastAPI](https://img.shields.io/badge/API-FastAPI-green)
 ![yt-dlp](https://img.shields.io/badge/Download-yt--dlp-red)
 ![FFmpeg](https://img.shields.io/badge/Converter-FFmpeg-orange)
-![Platform](https://img.shields.io/badge/Platform-Desktop-lightgrey)
-![OS](https://img.shields.io/badge/OS-Windows-blue)
-![Architecture](https://img.shields.io/badge/Architecture-MVC%2FLayers-informational)
-![Docs](https://img.shields.io/badge/Docs-Complete-brightgreen)
+![Platform](https://img.shields.io/badge/Platform-Desktop%20%2B%20Web-lightgrey)
 
-
-
-Estou desenvolvendo essa aplicação para aprender mais sobre Python e ajudar pessoas que necessitam de um aplicativo para baixar músicas ou vídeos, sem a inconveniência de múltiplos pop-ups.
+Aplicação para baixar músicas e vídeos do YouTube em MP3 ou MP4. Disponível como **app desktop** (Windows) e **site web** (GitHub Pages + API na VPS).
 
 ![YouTube Downloader](https://i.ibb.co/pjtCQKtP/youtubedownloader.png)
 
-## Instruções de Utilização
+## Estrutura do projeto
 
-1. Certifique-se de que o [FFmpeg](https://www.ffmpeg.org/download.html) está baixado e localizado na raiz do seu HD (ex.: `C:\`). Clique [aqui](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip) para fazer o download.
+```
+media-downloader/
+├── src/
+│   ├── main.py          # App desktop (CustomTkinter)
+│   └── downloader.py    # Lógica compartilhada (yt-dlp + FFmpeg)
+├── backend/
+│   ├── app.py           # API FastAPI
+│   └── requirements.txt
+├── frontend/
+│   ├── index.html       # Site (GitHub Pages)
+│   ├── style.css
+│   ├── app.js
+│   └── config.js        # URL da API
+└── deploy/              # Configs VPS e GitHub Pages
+```
 
-2. Adicione o caminho onde o FFmpeg está instalado ao PATH do sistema:
-   - No Windows:
-     1. Abra o **Menu Iniciar** e procure por "Editar variáveis de ambiente do sistema".
-     2. Na janela "Propriedades do Sistema", clique em **Variáveis de Ambiente**.
-     3. Na seção **Variáveis do sistema**, encontre a variável `Path` e clique em **Editar**.
-     4. Clique em **Novo** e insira o caminho completo do diretório onde o FFmpeg está localizado (ex.: `C:\ffmpeg\bin`).
-     5. Clique em **OK** para salvar as alterações.
-   - No macOS/Linux:
-     1. Abra o terminal e edite o arquivo de configuração do shell (ex.: `~/.bashrc`, `~/.zshrc`, ou `~/.bash_profile`).
-     2. Adicione a seguinte linha:  
-        ```bash
-        export PATH="$PATH:/caminho/para/ffmpeg/bin"
-        ```
-     3. Salve o arquivo e recarregue o shell com:  
-        ```bash
-        source ~/.bashrc
-        ```
+## Versão desktop
 
-3. Para rodar o código da aplicação na IDE de sua preferência, instale as seguintes bibliotecas:
+### Pré-requisitos
 
-- **yt_dlp**  
-  ```bash
-  pip install yt_dlp
-  ```
+1. [FFmpeg](https://www.ffmpeg.org/download.html) instalado e no PATH (Windows: ex. `C:\ffmpeg\bin`)
+2. Python 3.10+
 
-- **requests**  
-  ```bash
-  pip install requests
-  ```
-  
-- **custom tkinter**  
-  ```bash
-  pip install customtkinter
-  ```
+### Instalação
 
-- **pillow**  
-  ```bash
-  pip install pillow
-  ```
+```bash
+pip install yt_dlp requests customtkinter pillow
+```
 
-4. Após instalar todas as dependências necessárias, inicialize a aplicação.
+### Executar
 
-5. **Utilização da aplicação**:
-   - Insira o link do vídeo que deseja baixar.
-   - Escolha entre as opções disponíveis:
-     - **MP4**: Baixar o vídeo completo.
-     - **MP3**: Extrair o áudio do vídeo.
-   - Você será solicitado a selecionar um diretório para salvar o arquivo. Caso não escolha, o arquivo será salvo no diretório atual.
+```bash
+cd src
+python main.py
+```
+
+### Uso
+
+- Cole o link do vídeo ou playlist
+- Clique em **Info** para ver detalhes
+- Escolha **MP3** ou **MP4**
+- Opcional: formatação automática de nomes e pasta de destino
+
+## Versão web
+
+### Arquitetura
+
+- **Frontend:** GitHub Pages (`frontend/`)
+- **Backend:** VPS com FastAPI + yt-dlp + FFmpeg
+
+### Rodar localmente (desenvolvimento)
+
+**API:**
+
+```bash
+pip install -r backend/requirements.txt
+uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000
+```
+
+**Frontend:**
+
+```bash
+cd frontend
+python -m http.server 5500
+```
+
+Abra `http://localhost:5500`. O `config.js` já aponta para `http://localhost:8000`.
+
+### Deploy
+
+- **GitHub Pages:** veja [deploy/github-pages.md](deploy/github-pages.md)
+- **VPS:** veja [deploy/README.md](deploy/README.md)
+
+Antes do deploy, edite `frontend/config.js`:
+
+```javascript
+window.API_BASE = "https://api.seudominio.com";
+```
+
+## API (endpoints)
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/api/health` | Status da API |
+| POST | `/api/info` | Informações do vídeo/playlist |
+| POST | `/api/download` | Inicia download (retorna `job_id`) |
+| GET | `/api/progress/{job_id}` | Progresso via SSE |
+| GET | `/api/file/{job_id}` | Baixa o arquivo pronto |
+| DELETE | `/api/job/{job_id}` | Remove job e arquivos temporários |
+
+Documentação interativa: `http://localhost:8000/docs`
+
+## Aviso legal
+
+Uso pessoal e educacional. Baixar conteúdo do YouTube pode violar os Termos de Serviço da plataforma. Use com responsabilidade.
