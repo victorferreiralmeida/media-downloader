@@ -1,6 +1,6 @@
 // URL da API usada pelo frontend.
 // Em produção no GitHub Pages, a API precisa ser acessada via HTTPS.
-const DEFAULT_API_BASE = "https://137.131.227.77.nip.io";
+const DEFAULT_API_BASE = "https://commerce-internal-revolutionary-civilization.trycloudflare.com";
 
 if (!window.API_BASE) {
   const { protocol, hostname, port, origin } = window.location;
